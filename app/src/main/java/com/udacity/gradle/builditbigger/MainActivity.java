@@ -3,29 +3,39 @@ package com.udacity.gradle.builditbigger;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import com.example.jokeractivity.JokerMainActivity;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
-
 import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String JOKE_EXTRA = "joke_extra";
+    public String testingString = null;
+    @VisibleForTesting
+    public  String getExtraname()
+    {
+        return testingString;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
     }
 
 
@@ -52,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
+        Toast.makeText(this , "Clicked",Toast.LENGTH_SHORT).show();
         new JokesAsyncTask().execute();
 
     }
@@ -81,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             if (s != null) {
                 Log.e("sam","Joke is "+s);
+                testingString = "not null";
                 Intent intent= new Intent(getApplicationContext(), JokerMainActivity.class);
                 intent.putExtra(JOKE_EXTRA,s);
                 startActivity(intent);
