@@ -23,7 +23,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     public static final String JOKE_EXTRA = "joke_extra";
-    public String testingString = null;
+    public String testingString ;
     @VisibleForTesting
     public  String getExtraname()
     {

@@ -1,6 +1,9 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -12,35 +15,34 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+//import static android.support.test.espresso.intent.Intents.intended;
+//import static android.support.test.espresso.intent.Intents.intending;
+//import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
+//import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.udacity.gradle.builditbigger.MainActivity.JOKE_EXTRA;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     @Rule
-    public ActivityTestRule<MainActivity> activityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> intentsTestRule = new IntentsTestRule<>(MainActivity.class);
+
+
     @Before
-    public void init(){
-        activityActivityTestRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
+    public void stubbing(){
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
     }
+
     @Test
     public void clickbutton(){
-        //onView(withId(R.id.instructions_text_view)).check(matches(isDisplayed()));
-        //onView(withId(R.id.instructions_text_view)).perform(click());
+        // Idling resources are not necessary as the call is fast
         onView(withText("Tell Joke")).perform(click());
-
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        String extraname =activityActivityTestRule.getActivity().getExtraname();
-
-        Log.e("sam", "extra name is " + extraname);
+        intended(hasExtraWithKey(JOKE_EXTRA));
 
     }
 }
